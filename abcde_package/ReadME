@@ -1,0 +1,149 @@
+My copy of Nicks ABCDE method adapted for W Asymmetry measurement. 
+
+I used this to run on the VBTF ntuples to act as a cross check for the ICF
+ntuple measurement.
+
+Original README:
+##################################################################################################################
+# 					ABCDE Signal Extraction Method 						 #
+# 						Nicholas Wardle		 					 #
+# 					     Imperial College London	 					 #
+# 						  02/11/2010			  				 #
+##################################################################################################################
+
+	
+	WenuAnalyser.py
+	QCDAnalyser.py
+	TagNProbeCorrectionCalculator.py
+	ABCDEOptimise.py
+
+This package is designed to determine the W->enu signal from data.
+The User should be able to produce all the histograms required from the MonteCarlo
+and Data Ntuples provided by the ElectroWeakAnalysis/WENu package.
+
+There are only 2 main steps *REQUIRED* to determine the Signal (and cross-section) 
+
+ ----------------------------------------------------------------------------------------------------------------//
+ ----------------------------------------------------------------------------------------------------------------//
+
+1) 	WenuAnalyser.py		----------------------------------------------------------------------------------//
+
+Dependant on classes.py
+
+This will take specific Ntuples of the kind produces by EWK group
+placed in ntuples 
+
+and produce root files with 2D histograms.
+These histograms are used in the ABCDE method.
+
+WenuAnalyser must have the following command line arguments provided:
+
+	[1] - Filename, ie the Ntuple containing the tree VBTFPreseleTree
+	[2] - The number of Bins in X variable (eg for MET, this will be doubled for the MT plots)
+	[3] - The number of Bins in Y variable (eg for TrckRelIso)
+	[4] - The selection choices, eg 80 for WP80, 90 for WP90, 
+	      80TrckRelIso for WP80 with modified TrckRelIso
+	
+The Selection choices are defined in ABCDEClasses.py
+and included in a dictionary. If a new selection is added, it must also be added to the dictionary
+
+Currently, the variable combinations produced are:
+
+	X = PfMET, TcMET, CaloMET, MT, 
+	Y = TrckRelIso, EcalRelIso, SigmaiEiE, dEta, dPhi
+
+The root file produced by WenuAnalyser will contain one folder for each selection choice.
+Each folder contains the ABCDE 2D histograms for Barrel/Endcap events (wenuanaEB/EE)
+and also separated into electron and positron events.
+
+In addidtion, tagandprobe distributions are created for the variables in Y
+
+The maximum Y variable for the 2D hists and tag and probe is defined by the appropriate cut in he Selection choice
+(This corresponds to the E box definition)
+
+ ----------------------------------------------------------------------------------------------------------------//
+ ----------------------------------------------------------------------------------------------------------------//
+2a)     ABCDEOptimize.py ----------------------------------------------------------------------------------------//
+
+Run as:
+
+	python ABCDEOptimize.py Selection EB/EE
+This produces 2D histograms for the Bias and sensitivity to eP, currently uses only MonteCarlo.
+These will be saved in results folder.
+
+Selection is the choice of selection for the signal, EB - Barrel Only, EE - EndCap Only
+ ----------------------------------------------------------------------------------------------------------------//
+ ----------------------------------------------------------------------------------------------------------------//
+ 
+2b)	ABCDESignal.py  -----------------------------------------------------------------------------------------//
+
+Dependant on ABCDEClasses.py
+	     
+Run as:
+	python ABCDEOptimize.py Selection
+	
+This Step is where the ABCDEMethod is applied.
+This procedure is configurable from ABCDEMonteCarloParams.py (Filenames, lumis, UserOptions, cut ranges)
+This contains the choice of X and Y variable too.
+
+The 2D histos are taken and used to make a MonteCarlo study of the ABCDE at the Y variable Boundaries chosen
+(MakePlots option = True will produce Signal variations and MET distributions for each of these boundary choices)
+
+In addition, Data is read in and the procedure applied with following options:
+	
+		1) UseDataDetectorParams = False
+		
+			Data will be sclaed to the ScaleTo parameter and all input 
+			parameters are taken directly from the MonteCarlo
+			
+			However, If CorrectTheMCQCD, CorrectTheMCSignal or Use2DAntiSelection 
+			are true, then these distributions will be used for the input parameters/
+			determination of the bias instead of Raw MC.
+			
+			Note QCDAnalyser can produce the 2D histograms and is recommended.
+		
+		2) UseDataDetectorParams = True
+			
+			In this case, the efficiency and Acceptance are taken from 
+			ABCDEMonteCarloParams.
+			The parameters eA,eD and eP are taken from the MC 
+			(or as above if extra templates are provided)
+			
+		3) UseErsatz = True
+			2D histograms in Ersatz Template are used (can use 1D 
+			by setting correct MC Signal = True and using
+			this as the template.	
+			All 3 parameters are taken from the Ersatz Templates 
+			(provided separately)
+			
+			If 2D hists are unavailable from Ersatz, Can still use
+			1D template by setting Correct MC Signal = True and 
+			using this as correction template.
+			
+			3a) UseTagAndProbe = True
+				Tag and probe from the data is used for eP
+				rather than from Ersatz
+				
+Choices for EB/EE only and +/- only are available in ABCDEMonteCarloParams.py
+Also choices to rescale MC to match Data Normalisation and Iterate the ABCDE for
+electroweak backgrounds are defined here.
+
+One Should use and empty string for the systematics file if no such templates are available.
+This are not produced with the WenuAnalyser and must be taken from elsewhere or left 
+blank.
+
+The file ....Numbers.txt produce all of the parameters used in ABCDE and the Results + Errors
+This and any plots made will be put into [Selection]Plots/
+The user will be asked to make such a directory if it doesnt already exist.
+
+
+ ----------------------------------------------------------------------------------------------------------------//
+ ----------------------------------------------------------------------------------------------------------------//
+
+Effort has been made to warn the user of all issues which may arise when running the code with 
+missing files/histograms being detected however something is bound to have been overlooked.
+
+nckw@cern.ch
+ ----------------------------------------------------------------------------------------------------------------//
+ ----------------------------------------------------------------------------------------------------------------//
+
