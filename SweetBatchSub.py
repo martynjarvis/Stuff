@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+# SweetBatchSub, first attempt at an automated way of submitting ICF SUSY
+# framework jobs to the batch queue. Now completly deprecated due to Alex
+# activating beast mode and adding something similar but better in to the
+# framework.
 import errno
 
 import os
