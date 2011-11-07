@@ -3,6 +3,7 @@ import XMonad.Config.Gnome
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Gaps
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FadeInactive
 import XMonad.Actions.CycleWS 
@@ -15,28 +16,25 @@ myManageHook = composeAll
      , className =? "Spotify"     --> doShift "6:spotify"
      , className =? "Skype"       --> doShift "7:skype"
      , className =? "Canvas"      --> doFloat
-     , className =? "Canvas"      --> doShift "5:root"      --TCanvas
+     , className =? "Canvas"      --> doShift "5:root"
      , className =? "Browser"     --> doFloat
-     , className =? "Browser"     --> doShift "5:root"      --TBrowser 
-     , className =? "net-sourceforge-jnlp-runtime-Boot" --> doFloat --evo
+     , className =? "Browser"     --> doShift "5:root"
+     , className =? "net-sourceforge-jnlp-runtime-Boot"     --> doFloat --evo
      , isFullscreen               --> doFullFloat
+     , className =? "Unity-2d-launcher" --> doIgnore
+     , className =? "Unity-2d-panel"    --> doIgnore
+     , className =? "Do"          --> doFloat
      ]
 
---Fading
---myLogHook :: X()
---myLogHook = fadeInactiveLogHook fadeAmount
---    where fadeAmount = 0.8
+myLayouts = gaps [(U, 24)] $ layoutHook gnomeConfig
 
 main =  xmonad $ gnomeConfig
     { 
-    terminal = "gnome-terminal --hide-menubar"
+    terminal = "gnome-terminal"
     , workspaces = myWorkspaces
-    , manageHook = myManageHook <+> manageDocks <+> manageHook gnomeConfig
-    -- ,manageHook = myManageHook <+> manageHook gnomeConfig
-    , layoutHook = smartBorders (avoidStruts $ layoutHook gnomeConfig)
+    , manageHook = myManageHook <+> manageHook gnomeConfig
+    , layoutHook = myLayouts
     -- ,layoutHook = smartBorders (layoutHook gnomeConfig)
---    , logHook = myLogHook
---   ,handleEventHook = fullscreenEventHook <+> handleEventHook gnomeConfig
---above line fixes fullscreen videos for multi-screen setups, but only in
---v>0.9.1 or contrib setup
+    --, layoutHook = smartBorders (avoidStruts $ layoutHook gnomeConfig)
+    , focusFollowsMouse = False
     }
