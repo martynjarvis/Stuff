@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+##Hadd all the .root files in a dir that share a similar filename, 
+##ie file_0.root file_1.root file_2.root are hadd to become file.root
+
 import csv
 import re
 import os
