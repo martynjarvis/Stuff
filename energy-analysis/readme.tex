@@ -1,0 +1,42 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{graphicx}
+
+\begin{document}
+
+% \begin{figure}[htb]
+  % \caption{Time resolution of data.}
+  % \centering
+    % \includegraphics[width=0.5\textwidth]{timeresolution}
+% \end{figure}
+
+\begin{figure}[htb]
+  \caption{Average power usage for a day. Two peaks representing the morning and evening can be seen. Times in UTC, not corrected for daylight savings.}
+  \centering
+    \includegraphics[width=0.85\textwidth]{loadprofile}
+\end{figure}
+
+
+\begin{figure}[htb]
+  \caption{Daily energy usage over the length data. Several dips to 7kW.h are seen, these may represent holidays where only devices such as fridges are left on. Two peaks to zero are seen, these may represent power cuts or some problem with the data.}
+  \centering
+    \includegraphics[width=0.85\textwidth]{daybyday}
+\end{figure}
+
+\begin{figure}[htb]
+  \caption{Power usage during an Example day. Blue line is a fit to the constant background energy usage that was fitted to data during a period of no other usage (holiday).}
+  \centering
+    \includegraphics[width=0.85\textwidth]{background}
+\end{figure}
+
+
+\begin{figure}[htb]
+  \caption{Change in usage over a day. Positive peaks correspond to devices being turned on and negative peaks correspond to devices being turned off.}
+  \centering
+    \includegraphics[width=0.85\textwidth]{onoff}
+\end{figure}
+
+
+
+\end{document}
+
