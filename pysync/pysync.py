@@ -1,8 +1,5 @@
-"""Wrapper for rsync.
-Expects a file called .sync that contains a destination on each line.
-Expects a .syncignore file that contains a list of patterns to ignore.
-"""
 #!/usr/bin/env python
+"""Wrapper for rsync"""
 import os
 import subprocess
 import optparse
