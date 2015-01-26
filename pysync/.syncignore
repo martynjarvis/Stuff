@@ -1,0 +1,6 @@
+.sync
+.syncignore
+.git
+.gitignore
+*.pyc
+*.swp
